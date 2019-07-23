@@ -43,7 +43,7 @@ def index_to_elastic_stats(j):
         "Content-Type": "application/json"
     }
     dic = json.loads(j)
-    url = "http://40.83.102.66:9200/xdr-ir-status/_doc/"
+    url = "http://localhost:9200/xdr-ir-status/_doc/"
     res = requests.post(url=url, headers=headers, json=dic)
     return(res.text)
 
