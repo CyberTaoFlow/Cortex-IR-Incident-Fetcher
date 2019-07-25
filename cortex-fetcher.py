@@ -143,7 +143,6 @@ key = "XXXX"
 while True:
     get_incident(api_id,key)
     incident_id_list = []
-    print('At '+datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')+', system fetched and indexed these incidents ID: ',incident_id_list)
     #print(get_detail_incident(api_id,key,306))
     #print(convert_epoch())
     time.sleep(60.0 - (time.time() % 60.0))
