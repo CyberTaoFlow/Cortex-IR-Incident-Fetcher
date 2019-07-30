@@ -92,24 +92,27 @@ def get_incident(api_key_id, api_key):
         if '\"incident_id\":' ==  full[i]:
             count += 1
     #Write each fetched incident to Elastic Search index xdr-ir-incident
-    for i in range(0,count):
-        #with open('xdrincident'+str(i)+'.json','w') as f:
-        incident = '{'+fullresponse2[fullresponse2.find('\"incident_id\"'):fullresponse2.find('\"}')]+'\"}'
-        time = incident[incident.find('\"creation_time\":')+17:incident.find(', \"modification_time\"')]
-        goodtime = convert_time(time)
-        #Add @timestamp field to each incident
-        formated_incident = incident.replace(time,'\"'+goodtime+'\"')
-        formated_incident2 = formated_incident.replace('}',', "@timestamp": '+'\"'+goodtime+'\"}')
-        formated_incident3 = formated_incident2.replace('\'','')
-        formated_incident4 = formated_incident3.replace('null','\"NA\"')
-        #Check list of incident ID fetched
-        incident_id = incident[incident.find('{\"incident_id\": ')+17:incident.find(', \"creation_time\":')-1]
-        incident_id_list.append(incident_id)
-
-        #f.write(formated_incident4)
-        print(index_to_elastic(formated_incident4))
-        #crop each incident from full json to let the loop goes on
-        fullresponse2 = fullresponse2[fullresponse2.find('\"incident_id\"')+len(incident):-1]
+    for i in range(0,count-1):
+        with open('xdrincident'+str(i)+'.json','w') as f:
+            incident = '{'+fullresponse2[fullresponse2.find('\"incident_id\"'):fullresponse2.find('\"}')]+'\"}'
+            #print(incident)
+            time = incident[incident.find('\"creation_time\":')+17:incident.find(', \"modification_time\"')]
+            goodtime = convert_time(time)
+            #Add @timestamp field to each incident
+            formated_incident = incident.replace(time,'\"'+goodtime+'\"')
+            formated_incident2 = formated_incident.replace('}',', "@timestamp": '+'\"'+goodtime+'\"}')
+            formated_incident3 = formated_incident2.replace('\'','')
+            formated_incident4 = formated_incident3.replace('null','\"NA\"')
+            print(formated_incident4)
+            #Check list of incident ID fetched
+            incident_id = incident[incident.find('{\"incident_id\": ')+17:incident.find(', \"creation_time\":')-1]
+            #if incident_id not in incident_id_list:
+            incident_id_list.append(incident_id)
+            f.write(formated_incident4)
+                #f.write(fullresponse2)
+            print(index_to_elastic(formated_incident4))
+                #crop each incident from full json to let the loop goes on
+            fullresponse2 = fullresponse2[fullresponse2.find('\"incident_id\"')+len(incident):-1]
 
     #return statistic
 
