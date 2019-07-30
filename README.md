@@ -1,5 +1,5 @@
 # Cortex-IR-Incident-Fetcher
-The program helps fetched incidents from Cortex XDR IR and index to ElasticSearch for report.
+The program helps fetched incidents from Palo Alto Networks Cortex XDR IR and index to ElasticSearch for report.
 
 Currently, Cortex Incident Response does not support forward incidents via syslog. The only way to get incident is to fetch by API call. 
 The script will
