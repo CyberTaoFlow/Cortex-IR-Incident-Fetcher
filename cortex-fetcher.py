@@ -9,8 +9,7 @@ def test_standard_authentication(api_key_id, api_key):
         "Authorization": api_key
     }
     parameters = {}
-    #Input API URI of your Cortex instance here
-    res = requests.post(url="https://us-central1-xdr-cloudfunction-eu.cloudfunctions.net/cf-xxxxx/api_keys/validate/",
+    res = requests.post(url="https://us-central1-xdr-cloudfunction-eu.cloudfunctions.net/cf-xxxx/api_keys/validate/",
                         headers=headers,
                         json=parameters)
     return res
@@ -32,8 +31,7 @@ def index_to_elastic(j):
         "Content-Type": "application/json"
     }
     dic = json.loads(j)
-    #Input IP of your elasticsearch here. Localhost will work when running the script on ELK server
-    url = "http://localhost:9200/xdr-ir-incident/_doc/"
+    url = "http://x.x.x.x/xdr-ir-incident/_doc/"
     res = requests.post(url=url, headers=headers, json=dic)
     return(res.text)
 
@@ -43,7 +41,7 @@ def index_to_elastic_stats(j):
         "Content-Type": "application/json"
     }
     dic = json.loads(j)
-    url = "http://localhost:9200/xdr-ir-status/_doc/"
+    url = "http://x.x.x.x:9200/xdr-ir-status/_doc/"
     res = requests.post(url=url, headers=headers, json=dic)
     return(res.text)
 
@@ -55,9 +53,9 @@ def fetch_incident(api_key_id, api_key):
     }
     parameters = {'request_data': {
         'filters': [{'field': 'creation_time', 'operator': 'gte',
-                     'value': convert_epoch()}],
-        'search_from': 0,
-        'search_to': 5,
+                     'value': 1554102476000}],
+        'search_from': 300,
+        'search_to': 400,
         'sort': {'field': 'creation_time', 'keyword': 'desc'},
     }
     }
@@ -136,16 +134,15 @@ def get_detail_incident(api_key_id, api_key, incident_id):
     return res.text
 
 #Set up connection to XDR
-#Input API_ID and Key here. The information can be get on Cortex XDR IR Setting portal.
-api_id = "X"
-key = "XXXX"
+api_id = "x"
+key = "xxxx"
 #print(test_standard_authentication(api_id,key))
 
-
+incident_id_list = []
 #Execution
 while True:
     get_incident(api_id,key)
-    incident_id_list = []
+    print(incident_id_list)
     #print(get_detail_incident(api_id,key,306))
     #print(convert_epoch())
     time.sleep(60.0 - (time.time() % 60.0))
